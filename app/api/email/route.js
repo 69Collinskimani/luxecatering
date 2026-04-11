@@ -8,12 +8,22 @@ import {
   eventReminder,
 } from "@/lib/emailTemplates";
 
-const resend     = new Resend(process.env.RESEND_KEY);
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "litetech598@gmail.com";
 const FROM_EMAIL  = process.env.FROM_EMAIL  || "onboarding@resend.dev"; // use resend default until domain verified
 
+function getResendClient() {
+  const apiKey = process.env.RESEND_KEY;
+
+  if (!apiKey) {
+    throw new Error("RESEND_KEY is required.");
+  }
+
+  return new Resend(apiKey);
+}
+
 export async function POST(request) {
   try {
+    const resend = getResendClient();
     const body = await request.json();
     const { type, booking_id, to_email, name, booking_ref, event_date, package_name,
             guest_count, venue, total_amount, extras, notes, customer_email,

@@ -24,7 +24,7 @@ export async function PATCH(request, { params }) {
         .from("availability")
         .upsert({ date: data.event_date, status: "available" }, { onConflict: "date" });
 
-      await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email/send`, {
+      await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email`, {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -46,7 +46,7 @@ export async function PATCH(request, { params }) {
         .select()
         .single();
 
-      await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email/send`, {
+      await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email`, {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

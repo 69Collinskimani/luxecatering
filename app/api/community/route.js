@@ -131,7 +131,7 @@ export async function POST(request) {
       if (error) throw error;
 
       // Notify admin
-      fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email/send`, {
+      fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
