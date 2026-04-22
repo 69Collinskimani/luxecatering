@@ -15,8 +15,8 @@ export default function ChefProfiles() {
   useEffect(() => {
     fetch("/api/community?type=chefs")
       .then(r => r.json())
-      .then(data => { setChefs(data); setLoading(false); })
-      .catch(() => setLoading(false));
+      .then(data => { setChefs(Array.isArray(data) ? data : []); setLoading(false); })
+      .catch(() => { setChefs([]); setLoading(false); });
   }, []);
 
   return (
@@ -44,7 +44,7 @@ export default function ChefProfiles() {
               </div>
             ))}
           </div>
-        ) : (
+        ) : chefs.length > 0 ? (
           <div className="grid md:grid-cols-3 gap-8">
             {chefs.map((chef, i) => (
               <div key={chef.id} onClick={() => setSelected(chef)}
@@ -85,6 +85,10 @@ export default function ChefProfiles() {
                 </div>
               </div>
             ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-400">No chefs available at the moment.</p>
           </div>
         )}
       </div>

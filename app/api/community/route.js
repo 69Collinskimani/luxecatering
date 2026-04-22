@@ -14,7 +14,7 @@ export async function GET(request) {
         .eq("is_active", true)
         .order("display_order");
       if (error) throw error;
-      return Response.json(data);
+      return Response.json(data || []);
     }
 
     // ── Blog Posts ────────────────────────────────────────────────────────────
@@ -28,7 +28,7 @@ export async function GET(request) {
       if (category && category !== "all") query = query.eq("category", category);
       const { data, error } = await query;
       if (error) throw error;
-      return Response.json(data);
+      return Response.json(data || []);
     }
 
     // ── Single Blog Post ──────────────────────────────────────────────────────
@@ -91,7 +91,7 @@ export async function GET(request) {
         .eq("status", "approved")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return Response.json(data);
+      return Response.json(data || []);
     }
 
     return Response.json({ error: "Unknown type" }, { status: 400 });
@@ -131,7 +131,7 @@ export async function POST(request) {
       if (error) throw error;
 
       // Notify admin
-      fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email`, {
+      fetch("/api/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
