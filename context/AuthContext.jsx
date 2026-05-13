@@ -31,13 +31,24 @@ export function AuthProvider({ children }) {
       else setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription }, error: subscriptionError } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user || null);
       if (session?.user) fetchProfile(session.user.id);
       else { setProfile(null); setLoading(false); }
     });
 
-    return () => subscription.unsubscribe();
+    if (subscriptionError) {
+      console.error("Auth state change subscription error:", subscriptionError);
+      setLoading(false);
+    }
+
+    return () => {
+      try {
+        subscription?.unsubscribe();
+      } catch (err) {
+        console.error("Error unsubscribing from auth changes:", err);
+      }
+    };
   }, [supabase, fetchProfile]); // ← accurate deps, no stale closures
 
   const signInWithGoogle = async () => {

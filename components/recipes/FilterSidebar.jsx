@@ -33,6 +33,17 @@ export default function FilterSidebar({ filters, setFilters, onClose }) {
         ))}
       </div>
 
+      {/* Meal Type */}
+      <div className="mb-4">
+        <h4 className="text-xs font-black uppercase tracking-wider mb-2" style={{ color: "#666" }}>Meal Type</h4>
+        {["Breakfast", "Lunch", "Dinner", "Snack"].map(m => (
+          <label key={m} className="flex items-center gap-2 cursor-pointer mb-1">
+            <input type="radio" name="mealType" checked={filters.mealType === m} onChange={() => setFilters(p => ({ ...p, mealType: p.mealType === m ? "" : m }))} className="accent-orange-500" />
+            <span className="text-sm">{m}</span>
+          </label>
+        ))}
+      </div>
+
       {/* Prep Time */}
       <div className="mb-4">
         <h4 className="text-xs font-black uppercase tracking-wider mb-2" style={{ color: "#666" }}>Prep Time</h4>
